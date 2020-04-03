@@ -1,9 +1,30 @@
 
-# Connecting your Conversational Interface to Autonomous Transaction Processing (ATP)
+# Connecting your Conversational Interface to your Cloud Database
 Conversational Interfaces has been on the rise the past couple of years with the technology showing more presence in our everyday life. During the last 2 years I&#39;ve been getting immersed in plenty of conversational projects, where one interesting pattern is that we tend to use conversational more frequently in the way we interact with businesses. A conversational project differs from the traditional way of developing applications since there&#39;s a lot to it before you start mapping out the architecture. This includes how you define your corpus, the appearance, what channel (voice or chat), what&#39;s the demography etc. There&#39;s a lot of good info on how we approach conversational at [bit.ly/ODAEnablement](https://fnimphiu.github.io/OracleTechExchange/). Nevertheless, setting up the integration to your systems backend usually has to do with a large part of the workload. In this article I show how you can expose, fetch and present data dynamically from an ATP (Autonomous Transaction Processing) database instance using natural language. ATP is a Cloud-based transactional database that&#39;s self-driving and requires no database administration. The hardware and software is not dependant on you installing it and it handles a bunch of operational tasks for you: such as patching, backing up data and scaling the database.ORDS (Oracle REST Data Services) has been around for a while and makes it possible for you to REST-enable your database schemas. With this approach, you can expose data that needs to be consumed by your applications seamlessly. Creating an ATP instance and enabling ORDS        3Retrieving data from ATP        10Querying ATP and displaying the result through cards created with the bots SDK        18Conclusion        24                                   Creating an ATP instance and enabling ORDS
-# Creating the database
-Let&#39;s start with you creatingthe ATP instance, which is your transactional database. When entering the Oracle Cloud Infrastructure (OCI)dashboard, you can either go the quick route and press the button that says **Create a database** or use the hamburger menu top-left **\&gt; Autonomous Transaction Processing**.
 
+![](images/0-oda-atp-lab-architecture.png)
+
+# Creating the database
+Let&#39;s start with you creating the ATP instance, which is your transactional database. When entering the Oracle Cloud Infrastructure (OCI)dashboard, you can either go the quick route and press the button that says **Create a database** or use the hamburger menu top-left **>** **Autonomous Transaction Processing**.
+
+![](images/1-oci-landing-page.png)
+
+Now choose the compartment in which you want to deploy the instance, give it a display & database name. We’re also going with the **Transaction Processing** as workload and **Serverless** as a deployment type. 
+
+![](2-atp-instance-creation.png)
+You can decide how much resources you need for the database (**1 CPU Core, 1 TB Storage** is set as a default). Choose **Transaction Processing**.
+
+![](3-atp-instance-creation.png)
+
+After you provided the administrator credentials, leave the license type as is and press the blue **Create Autonomous Database** button on your bottom left. 
+
+![](4-atp-instance-creation.png)
+
+You will now have to wait a couple of minutes for the database to provision. But don’t go away from the computer just yet – it took me roughly 2 minutes to get the instance up and running!
+
+![](5-atp-instance-available.png)
+
+When the instance is ready, it’s going to tell you that it is ![](6-atp-instance-available.png) in green. Now is the time to create the user and enabling ORDS.
 
 figure 24: the engine understands **what** we want to do, but not **which** employee we would like to search for. as you can see, it asks us for a specific employee nameThen the bot will ask you what specific information you&#39;re looking for since it cannot find any entities it knows about. This is where our prompts come to use from the entities section.
 # Working with the NLP data and creating cards through the backend
