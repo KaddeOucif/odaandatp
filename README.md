@@ -11,20 +11,104 @@ Let&#39;s start with you creating the ATP instance, which is your transactional 
 
 Now choose the compartment in which you want to deploy the instance, give it a display & database name. We’re also going with the **Transaction Processing** as workload and **Serverless** as a deployment type. 
 
-![](2-atp-instance-creation.png)
+![](images/2-atp-instance-creation.png)
+
 You can decide how much resources you need for the database (**1 CPU Core, 1 TB Storage** is set as a default). Choose **Transaction Processing**.
 
-![](3-atp-instance-creation.png)
+![](images/3-atp-instance-creation.png)
 
 After you provided the administrator credentials, leave the license type as is and press the blue **Create Autonomous Database** button on your bottom left. 
 
-![](4-atp-instance-creation.png)
+![](images/4-atp-instance-creation.png)
 
 You will now have to wait a couple of minutes for the database to provision. But don’t go away from the computer just yet – it took me roughly 2 minutes to get the instance up and running!
 
-![](5-atp-instance-available.png)
+![](images/5-atp-instance-available.png)
 
-When the instance is ready, it’s going to tell you that it is ![](6-atp-instance-available.png) in green. Now is the time to create the user and enabling ORDS.
+When the instance is ready, it’s going to tell you that it is ![](images/6-atp-instance-available.png) in green. Now is the time to create the user and enabling ORDS.
+
+# Creating a database user and enabling ORDS
+There are various ways of connecting to your database and enabling ORDS. I recommend you to have a look at the getting started guide or, if you want to understand what it’s all about, the "Developing RESTful Services in Autonomous Database" documentation. 
+In the following section, you are going to do it using APEX builder and SQL Developer Web which is a visual and simple approach. 
+
+1.	Go to **Service Console > Development** and then **SQL Developer Web**
+2.	Login with your admin credentials which you defined when you created the instance
+3.	You should now be at the **Worksheet**. Paste this snippet into it and press ![](images/7-worksheet-button.png). Do not forget that you should replace ```TESTUSER``` and ```<password>;``` with your user and password
+
+```SQL
+CREATE USER TESTUSER IDENTIFIED BY <password>;
+GRANT "CONNECT" TO TESTUSER;
+GRANT "RESOURCE" TO TESTUSER;
+ALTER USER TESTUSER QUOTA UNLIMITED ON DATA;
+
+BEGIN
+
+ords_admin.enable_schema(
+p_enabled => TRUE,
+p_schema => 'TESTUSER',
+p_url_mapping_type => 'BASE_PATH',
+p_url_mapping_pattern => 'TESTUSER',
+p_auto_rest_auth => NULL
+);
+
+commit;
+
+END;
+```
+
+4. You’ve now created a user and ORDS-enabled that schema
+
+#Creating a workspace and loading sample data
+
+Log out and go back to the **Development** page where you found the link to the **SQL Developer Web portal**. Go to **Oracle APEX > Administration Services** and log in with your admin account. 
+
+![](images/8-apex-login.png)
+
+Press the ![](9-create-workspace-button.png) button and choose the newly created user.
+
+![](10-creating-workspace.png)
+
+Your workspace is created, go top-right to log out of your admin account and log in to your user that you created earlier. 
+To keep it simple, you will provision your database with a sample dataset. Go to **SQL Workshop > Utilities > Sample Datasets** and install the **EMP / DEPT** dataset. 
+
+![](11-generating-sample-dataset.png)
+
+When done, go back to **SQL Workshop > RESTful services** and click on the blue button on the top right that says **Register Schema with ORDS**. You can leave everything as is for now, no need for any authentication. If you’d like to add authentication to your endpoint then this can be done under **Privileges** under the **RESTful Data Services** section. 
+
+![](12-ords-register-schema.png)
+
+On the left hand-side you see information about the modules that were created for you, as well as  how you can consume the API. 
+Go to the **Modules** section and click on ```employees/```. This will give you some information about that specific endpoint as well as the full URL details. You are going to use this endpoint throughout the remaining of this tutorial, so make sure you copy and save it. 
+
+![](13-ords-endpoint-employees.png)
+
+You can use any REST Client to access the data. This tutorial uses Postman. If you can access the data then you are good to go to integrate ORDS in Oracle Digital Assistant.
+
+![](14-test-ords-postman.png)
+
+# Import the Sample Skill
+
+This tutorial assumes you to be experienced with Oracle Digital Assistant. If you are not, then it is time for a break to exercise a beginners tutorial:
+
+https://docs.oracle.com/en/cloud/paas/digital-assistant/tutorials.html
+
+To integrate calls to ORDS in Oracle Digital Asisstant, you need to import the sample skill provided with this article to your Oracle Digital Assistant instance. In Oracle Digital Assistant, use the "hamburger" icon top-left and select Development -> Skills. Then …
+
+1.	Press ![](15-import-skill-button.png) top right
+2.	Open the imported skill and press the ![](16-train-button.png) button. 
+3.	In the opened dialog, keep the default Ht Trainer setting. 
+4.	When you’ve done that, go to the Settings panel (![](17-settings-button.png)) and select the Configuration tab. 
+5.	Click on the ordsUrl skill parameter and press Edit to replace the value of <ords-url> with your ORDS employees/ endpoint.
+  
+Go to ![](18-intent-button.png) top-left. You see 3 intents:
+
+- **GetEmployee**: this intent is populated with utterances that gets us the list of employees
+- **Greeting**: greets us when we start a conversation
+- **ShowHireDate**: gets us the date an employee was hired
+
+![](19-intent-pane.png)
+
+# Understanding the Dialog flow
 
 figure 24: the engine understands **what** we want to do, but not **which** employee we would like to search for. as you can see, it asks us for a specific employee nameThen the bot will ask you what specific information you&#39;re looking for since it cannot find any entities it knows about. This is where our prompts come to use from the entities section.
 # Working with the NLP data and creating cards through the backend
