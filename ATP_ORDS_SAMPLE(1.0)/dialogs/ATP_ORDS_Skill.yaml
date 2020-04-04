@@ -1,0 +1,150 @@
+#metadata: information about the flow
+#  platformVersion: the version of the bots platform that this flow was written to work with 
+metadata:
+  platformVersion: "1.1"
+main: true
+name: ATP_ORDS_SAMPLE
+#context: Define the variables which will used throughout the dialog flow here.
+context:
+  variables:
+    empArr: "string"
+    cardsRangeStart: "int"
+    iResult: "nlpresult"
+    employee: "Employee"
+
+states:
+  
+  # Setting the iteriator to 0
+  setCardsRangeStart:
+    component: "System.SetVariable"
+    properties:
+      variable: "cardsRangeStart"
+      value: 0
+    transitions: {}
+    
+  intent:
+    component: "System.Intent"
+    properties:
+      variable: "iResult"
+      optionsPrompt: "Do you want to"
+      daIntercept: "always" 
+    transitions:
+      actions:
+        GetEmployee: "getEmployeeData"
+        ShowHireDate: "resolveEmployee"
+        unresolvedIntent: "unresolved"
+  
+  # Custom component that receives the employee information from our ORDS endpoint in ATP
+  getEmployeeData:
+    component: "getEmpTable"
+    properties: 
+      ordsUrl: "${system.config.ordsUrl}"
+    transitions: 
+      actions: 
+        next: "showResult"
+        error: "errorOutput"
+    
+  # CommonResponse component dynamically showing the data we get 4 hits at a time
+  
+  showResult:
+    component: "System.CommonResponse"
+    properties:
+      metadata:
+        responseItems:
+        - type: "text"
+          text: "Here's a list of employees:"
+          separateBubbles: true
+          visible:
+            expression: "<#if cardsRangeStart?number == 0>true<#else>false</#if>"
+          name: "Employees"
+        - type: "cards"
+          cardLayout: "vertical"
+          name: "EmployeeCard"
+          cards:
+          - title: "${empArr.ename}"
+            description: "${empArr.job}, ${empArr.empno}"
+            #imageUrl: "<picture-of-employee>.jpg"
+            name: "EmployeeInfo"
+            iteratorVariable: "empArr"
+            rangeStart: "${cardsRangeStart}"
+            rangeSize: "4"
+        globalActions: 
+        - label: "More employees"
+          type: "postback"
+          skipAutoNumber: true
+          visible:
+            expression: "<#if cardsRangeStart?number+4 < empArr.value?size>true<#else>false</#if>"
+          payload:
+            action: "more"
+            variables:
+              cardsRangeStart: "${cardsRangeStart?number+4}"
+          name: "Show more"
+        - label: "Done"
+          type: "postback"
+          payload:
+            action: "done"
+          name: "Done"
+      processUserMessage: true
+    transitions:
+      actions:
+        more: "showResult" 
+        done: "finish" 
+        textReceived: "intent"
+  
+  # This is where we retrieve the hire date for an employee, leveraging the entities. 
+  
+  resolveEmployee:
+    component: "System.ResolveEntities"
+    properties:
+      variable: "employee"
+      nlpResultVariable: "iResult"     
+      maxPrompts: 2
+      cancelPolicy: "immediate"
+    transitions:
+      actions:
+        cancel: "noEmployee"
+        next: "getEmployeeHireDate"
+    
+  getEmployeeHireDate:
+    component: "getEmpHireDate"
+    properties: 
+      ordsUrl: "${system.config.ordsUrl}"
+      employee: "${employee.value}"
+    transitions: 
+      actions: 
+        next: "finish"
+        error: "errorOutput"
+  
+  # A couple of necessary outputs
+  
+  finish:
+    component: "System.CommonResponse"
+    properties:
+      processUserMessage: false
+      metadata: 
+        responseItems:      
+        - type: "text"
+          text: "Hope I was of help."
+    transitions:
+      return: "done"
+  
+  noEmployee: 
+    component: "System.Output"
+    properties:
+      text: "No employee with that name found."
+    transitions: 
+      return: "done"
+      
+  errorOutput: 
+    component: "System.Output"
+    properties:
+      text: "Something went wrong, please check the logs."
+    transitions: 
+      return: "done"
+      
+  unresolved: 
+    component: "System.Output"
+    properties:
+      text: "Couldn't understand you"
+    transitions: 
+      return: "done"

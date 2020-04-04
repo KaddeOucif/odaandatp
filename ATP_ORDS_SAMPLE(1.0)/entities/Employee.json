@@ -1,0 +1,40 @@
+{
+  "name" : "Employee",
+  "type" : "ENUMVALUES",
+  "enumValues" : [ {
+    "canonicalName" : "SMITH",
+    "synonyms" : null
+  }, {
+    "canonicalName" : "ALLEN",
+    "synonyms" : null
+  }, {
+    "canonicalName" : "WARD",
+    "synonyms" : null
+  }, {
+    "canonicalName" : "JONES",
+    "synonyms" : null
+  }, {
+    "canonicalName" : "MARTIN",
+    "synonyms" : null
+  }, {
+    "canonicalName" : "BLAKE",
+    "synonyms" : null
+  }, {
+    "canonicalName" : "CLARK",
+    "synonyms" : null
+  } ],
+  "namedEntityRuleParams" : [ ],
+  "multiValue" : false,
+  "fuzzyMatch" : true,
+  "promptForDisambiguation" : true,
+  "disambiguationPrompt" : "You can only get employee information from one employee at a time",
+  "botPrompts" : [ {
+    "text" : "Sorry, I handle a lot of names every day. Could you try again?",
+    "sequenceNr" : 2
+  }, {
+    "text" : "Could you please let me know what employee you want to retrieve the information from?",
+    "sequenceNr" : 1
+  } ],
+  "validationRules" : [ ],
+  "compositeBagItems" : [ ]
+}

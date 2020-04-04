@@ -1,0 +1,14 @@
+{
+  "languageTag" : "default",
+  "keys" : {
+    "system.intent.GetEmployee.conversationName" : {
+      "message" : "Get the list of employees"
+    },
+    "system.intent.Greeting.conversationName" : {
+      "message" : "Welcome!"
+    },
+    "system.intent.ShowHireDate.conversationName" : {
+      "message" : "Show me when an employee was hired"
+    }
+  }
+}

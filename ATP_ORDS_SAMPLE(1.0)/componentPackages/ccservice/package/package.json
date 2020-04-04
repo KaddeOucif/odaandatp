@@ -1,0 +1,27 @@
+{
+  "name": "atp_ords",
+  "version": "1.0.0",
+  "description": "Oracle Bots Custom Component Package",
+  "main": "main.js",
+  "scripts": {
+    "bots-node-sdk": "bots-node-sdk",
+    "help": "npm run bots-node-sdk -- --help",
+    "prepack": "npm run bots-node-sdk -- pack --dry-run",
+    "start": "npm run bots-node-sdk -- service ."
+  },
+  "repository": {},
+  "dependencies": {
+    "nodemon": "^1.19.1",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "@oracle/bots-node-sdk": "^2.1.3",
+    "express": "^4.16.3"
+  },
+  "author": "Kadday Oucif",
+  "license": "ISC",
+  "bundledDependencies": [
+    "nodemon",
+    "request"
+  ]
+}

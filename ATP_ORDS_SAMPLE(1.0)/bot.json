@@ -1,0 +1,9 @@
+{
+  "type" : "USER",
+  "name" : "ATP_ORDS_SAMPLE",
+  "displayName" : "ATP_ORDS_SAMPLE",
+  "description" : "A skill pulling data from an ATP instance through ORDS",
+  "version" : "1.0",
+  "intentTrainer" : "Sakura",
+  "trainingModels" : [ ]
+}

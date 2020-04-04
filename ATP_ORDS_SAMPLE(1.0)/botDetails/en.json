@@ -1,0 +1,6 @@
+{
+  "invocationName" : "ATP_ORDS_Skill",
+  "shortDescription" : "A skill pulling data from an ATP instance through ORDS and dynamically creating a list of it",
+  "fullDescription" : null,
+  "sampleInvocations" : [ "An example utterance" ]
+}

@@ -1,0 +1,25 @@
+{
+  "name" : "ShowHireDate",
+  "type" : "NLPIntent",
+  "intentParameters" : [ {
+    "name" : "Employee",
+    "required" : true,
+    "entity" : "Employee"
+  } ],
+  "exampleData" : [ {
+    "sentence" : "When did you hire Allen",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "Show me the date in which Clark was hired",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "What day did Allen start",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "Which day did you hire allen",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "When was Clark hired?",
+    "exampleEntities" : [ ]
+  } ]
+}

@@ -1,0 +1,21 @@
+{
+  "name" : "GetEmployee",
+  "type" : "NLPIntent",
+  "intentParameters" : [ ],
+  "exampleData" : [ {
+    "sentence" : "Pull employee data from the database",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "Show me the employees",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "Get me the list of workers",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "Give me the list of employees",
+    "exampleEntities" : [ ]
+  }, {
+    "sentence" : "Get me the list of employees",
+    "exampleEntities" : [ ]
+  } ]
+}
